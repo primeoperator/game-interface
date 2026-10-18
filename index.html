@@ -150,7 +150,54 @@ section{margin:64px 0 0}
 #cta .card{padding:36px 20px}
 footer{margin:60px 0 20px;color:var(--sub);font-size:14px;text-align:center;font-weight:600}
 
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* ---- переключатель игровых стилей ---- */
+.styles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin:0 0 22px}
+.tab{display:flex;align-items:center;justify-content:center;gap:12px;font:800 16px/1.25 'Plus Jakarta Sans',system-ui,sans-serif;letter-spacing:-0.01em;text-align:left;color:var(--ink);background:var(--card);border:3px solid var(--line);border-radius:18px;box-shadow:0 7px 0 var(--line);padding:18px 20px;cursor:pointer;transition:transform .16s cubic-bezier(.34,1.56,.64,1),box-shadow .16s,background .2s}
+.tab span{font-size:28px;line-height:1}
+.tab:hover{transform:translateY(-3px);box-shadow:0 10px 0 var(--line)}
+.tab:active{transform:translateY(5px);box-shadow:0 2px 0 var(--line)}
+.tab.on{color:#3a2431;transform:translateY(5px);box-shadow:0 2px 0 var(--line)}
+.tab[data-s=pixel].on{background:var(--gold)}.tab[data-s=purble].on{background:var(--pink)}.tab[data-s=cozy].on{background:var(--mint)}
+.tab:focus-visible{outline:3px solid #ff3d8b;outline-offset:3px}
+.vibe{display:flex;gap:16px;align-items:center;margin:0 0 22px;padding:18px 22px;background:var(--card);border:3px solid var(--line);border-radius:16px;box-shadow:5px 5px 0 var(--line)}
+.vibe i{font-style:normal;font-size:36px;line-height:1}.vibe b{display:block;font-size:18px;font-weight:800;letter-spacing:-0.01em}.vibe p{margin:4px 0 0;color:var(--sub)}
+.dc{display:flex;flex-direction:column;align-items:flex-start}
+.shot{position:relative;display:grid;place-items:center;width:100%;height:136px;margin:0 0 16px;overflow:hidden;border-radius:10px}
+.shot .ico{position:relative;z-index:1;font-size:60px;line-height:1}
+.shot .tag{position:absolute;left:10px;top:10px;z-index:1;font-size:10px;font-weight:800;letter-spacing:.04em}
+.btn.soon{background:transparent;color:var(--sub);border-style:dashed;box-shadow:none;cursor:default}
+.btn.soon:hover{background:transparent}.btn.soon:active{transform:none;box-shadow:none}
+.dc .btn{margin-top:auto}
+/* 16-bit */
+[data-style=pixel] .vibe,[data-style=pixel] .dc{border-radius:6px}
+[data-style=pixel] .shot{border-radius:4px;background:#2a1a30 linear-gradient(45deg,#33203f 25%,transparent 25%,transparent 75%,#33203f 75%) 0 0/16px 16px;image-rendering:pixelated}
+[data-style=pixel] .shot .ico{text-shadow:4px 4px 0 rgba(0,0,0,.4)}
+[data-style=pixel] .shot .tag{font-family:'Press Start 2P',ui-monospace,monospace;font-size:8px;color:#ffe9b0}
+/* Purble Place */
+[data-style=purble] .vibe,[data-style=purble] .dc{color:#3a2431;border-color:#d65a8a;border-radius:24px;background:linear-gradient(160deg,#fff,#ffe3ee);box-shadow:0 8px 0 #f0a3c0}
+[data-style=purble] .vibe p,[data-style=purble] .dc .note{color:#7a4f63}
+[data-style=purble] .dc h3{color:#3a2431}
+[data-style=purble] .btn.soon{color:#a36a82;border-color:#d65a8a}
+[data-style=purble] .shot{border-radius:16px;background:repeating-linear-gradient(45deg,#ffd9e6 0 14px,#fff6fa 14px 28px)}
+[data-style=purble] .shot::after{content:"";position:absolute;left:0;right:0;bottom:0;height:24px;border-top:4px solid #565f6d;background:repeating-linear-gradient(90deg,#8d97a6 0 18px,#6f7a8a 18px 36px);animation:belt 1s linear infinite}
+[data-style=purble] .shot .ico{margin-bottom:22px;animation:bob 1.2s ease-in-out infinite}
+[data-style=purble] .shot .tag{color:#c2477a}
+/* Cozy Craft */
+[data-style=cozy] .vibe,[data-style=cozy] .dc{color:#3a2431;border-color:transparent;border-radius:30px;background:#fff7ea;box-shadow:0 18px 36px -14px rgba(120,80,70,.4),0 2px 0 #fff inset}
+[data-style=cozy] .vibe p,[data-style=cozy] .dc .note{color:#7a6460}
+[data-style=cozy] .dc h3{color:#3a2431}
+[data-style=cozy] .btn{border-radius:999px;border-color:transparent;box-shadow:0 8px 16px -6px rgba(120,80,70,.5)}
+[data-style=cozy] .btn:active{box-shadow:0 2px 6px -2px rgba(120,80,70,.5)}
+[data-style=cozy] .btn.soon{border:2px dashed #cdb8a8;box-shadow:none;color:#9a8478}
+[data-style=cozy] .shot{border-radius:22px;background:radial-gradient(circle at 18% 30%,#ffe3ec 0 38%,transparent 39%),radial-gradient(circle at 82% 72%,#d6f0e4 0 36%,transparent 37%),#fff2dc}
+[data-style=cozy] .shot .ico{animation:float 3.2s ease-in-out infinite;filter:drop-shadow(0 10px 10px rgba(120,80,70,.3))}
+[data-style=cozy] .shot .tag{color:#b86a7a}
+.swap .vibe,.swap .dc{animation:swapin .5s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes swapin{from{opacity:0;transform:translateY(14px) scale(.97)}}
+@keyframes belt{to{background-position:36px 0}}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes float{50%{transform:translateY(-8px) rotate(-3deg)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 </style></head><body><div class="w">
 <header><div class="logo px" id="brand"></div><nav><a href="#demo">Демо</a><a href="#how">Как работает</a><a href="#start">Как запускаемся</a><a href="#cta">Связаться</a></nav></header>
 
@@ -175,10 +222,17 @@ footer{margin:60px 0 20px;color:var(--sub);font-size:14px;text-align:center;font
 </div></section>
 
 <section id="demo"><h2>Попробуйте сами</h2>
-<div class="g2">
-<div class="card"><h3>🎂 Конструктор торта</h3><p class="note" style="margin:0 0 16px">Так заказ собирает клиент: формат, бисквит, начинка, топпинги, надпись.</p><a class="btn" href="https://primeoperator.github.io/game-interface/client/" target="_blank" rel="noopener">Открыть</a></div>
-<div class="card"><h3>🏪 Кабинет кондитера</h3><p class="note" style="margin:0 0 16px">Так заказы видит владелец: гости, комнаты, чек и диалог. Нажмите «Симулировать входящий заказ» и перетащите гостя.</p><a class="btn alt" href="https://primeoperator.github.io/game-interface/admin/" target="_blank" rel="noopener">Открыть</a></div>
-</div><p class="note">Это демо-версии без сервера. В рабочем проекте заказ из конструктора приходит в кабинет мгновенно, а клиент получает сообщения от вашего бота в Telegram.</p></section>
+<p class="lead" style="margin-bottom:22px">Один и тот же сервис можно одеть в стиль вашего бренда. Выберите вайб и посмотрите, как это выглядит.</p>
+<div class="styles" role="tablist" aria-label="Игровой стиль интерфейса">
+<button class="tab on" role="tab" data-s="pixel" aria-selected="true"><span aria-hidden="true">👾</span>16-Bit Retro Pixel</button>
+<button class="tab" role="tab" data-s="purble" aria-selected="false" tabindex="-1"><span aria-hidden="true">🎂</span>Purble Place: Comfy Cakes</button>
+<button class="tab" role="tab" data-s="cozy" aria-selected="false" tabindex="-1"><span aria-hidden="true">🍃</span>Cozy Craft: Animal Crossing</button>
+</div>
+<div id="demoStage" data-style="pixel">
+<div class="vibe" aria-live="polite"><i id="vibeIco" aria-hidden="true"></i><div><b id="vibeName"></b><p id="vibeText"></p></div></div>
+<div class="g2" id="demoCards"></div>
+</div>
+<p class="note">Это демо-версии без сервера. В рабочем проекте заказ из конструктора приходит в кабинет мгновенно, а клиент получает сообщения от вашего бота в Telegram. Стиль, цвета, шрифты и звуки подбираем под ваш бренд.</p></section>
 
 <section><h2>Что получает бизнес</h2>
 <ul class="ok"><li>Меньше переписок: клиент указывает всё нужное до того, как напишет вам</li><li>Все заказы и статусы на одном экране, на телефоне и на компьютере</li><li>Меню, цены и правила подстроены под ваш процесс, а не наоборот</li><li>Ничего не нужно устанавливать: всё работает внутри Telegram</li><li>Интерфейс, который запоминается и нравится клиентам</li></ul>
@@ -289,5 +343,46 @@ b.hidden=false;
 
   function loop(ms){draw(ms/1000);if(!still)requestAnimationFrame(loop)}
   requestAnimationFrame(loop);
+})();
+</script>
+<script>
+(function(){
+  // Настройки демо. Когда модуль стиля опубликован на GitHub Pages, поставьте soon:false: кнопка станет рабочей ссылкой.
+  const BASE='https://primeoperator.github.io/game-interface/';
+  const STYLES={
+    pixel:{ico:'👾',name:'16-Bit Retro Pixel',tag:'▶ PRESS START',
+      vibe:'Ламповая ностальгия по ретро-играм 90-х. Идеально для молодежных и гик-студий.',
+      cards:[
+        {ico:'🎂',t:'Конструктор торта',d:'Так заказ собирает клиент: формат, бисквит, начинка, топпинги, надпись.',url:BASE+'client/',soon:false},
+        {ico:'🏪',t:'Кабинет кондитера',d:'Так заказы видит владелец: гости, комнаты, чек и диалог. Нажмите «Симулировать входящий заказ» и перетащите гостя.',url:BASE+'admin/',soon:false}]},
+    purble:{ico:'🎂',name:'Purble Place: Comfy Cakes',tag:'★ COMFY CAKES',
+      vibe:'Тот самый интерактивный конвейер из Windows 7! Клиент собирает слои, крем и декор под сочные звуки кондитерского цеха.',
+      cards:[
+        {ico:'🎂',t:'Конвейер тортиков',d:'Торт едет по ленте, а клиент добавляет слои, крем и декор.',url:BASE+'purble/',soon:true},
+        {ico:'🏪',t:'Кабинет кондитера',d:'Те же заказы в стиле кондитерского цеха: принять, отправить в работу, выдать.',url:BASE+'purble/admin/',soon:true}]},
+    cozy:{ico:'🍃',name:'Cozy Craft: Animal Crossing',tag:'♡ COZY CRAFT',
+      vibe:'Мягкий, тёплый премиальный стиль в духе Animal Crossing. Пастельные тона, уют и визуальный комфорт без пикселей.',
+      cards:[
+        {ico:'🧁',t:'Уютный конструктор',d:'Мягкие цвета и объём: клиент собирает торт, как будто украшает комнату.',url:BASE+'cozy/',soon:true},
+        {ico:'🏡',t:'Кабинет кондитера',d:'Спокойный кабинет, где гости заходят, ждут и получают заказ.',url:BASE+'cozy/admin/',soon:true}]}
+  };
+  const stage=document.getElementById('demoStage'),cards=document.getElementById('demoCards'),tabs=[...document.querySelectorAll('.tab')];
+  function render(key,animate){
+    const s=STYLES[key];stage.dataset.style=key;
+    document.getElementById('vibeIco').textContent=s.ico;
+    document.getElementById('vibeName').textContent=s.name;
+    document.getElementById('vibeText').textContent=s.vibe;
+    cards.innerHTML=s.cards.map(c=>'<article class="card dc"><div class="shot"><span class="tag">'+s.tag+'</span><span class="ico" aria-hidden="true">'+c.ico+'</span></div><h3>'+c.t+'</h3><p class="note" style="margin:0 0 16px">'+c.d+'</p>'+
+      (c.soon?'<span class="btn soon" aria-disabled="true">Скоро</span>':'<a class="btn" href="'+c.url+'" target="_blank" rel="noopener">Открыть</a>')+'</article>').join('');
+    tabs.forEach(t=>{const on=t.dataset.s===key;t.classList.toggle('on',on);t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1});
+    if(animate){stage.classList.remove('swap');void stage.offsetWidth;stage.classList.add('swap')}
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>{if(!t.classList.contains('on'))render(t.dataset.s,true)}));
+  document.querySelector('.styles').addEventListener('keydown',e=>{
+    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+    const i=tabs.findIndex(t=>t.classList.contains('on')),n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];
+    n.focus();render(n.dataset.s,true);e.preventDefault();
+  });
+  render('pixel',false);
 })();
 </script></body></html>
