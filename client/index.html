@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Конструктор торта</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3e3c8;--panel:#fff4dc;--ink:#3a2431;--gold:#ffcf40;--line:#3a2431;color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1a30;--panel:#3d2848;--ink:#fff4dc;--line:#ff8fb1}}
+:root[data-theme="dark"]{--bg:#2a1a30;--panel:#3d2848;--ink:#fff4dc;--line:#ff8fb1}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;padding:10px 10px 120px;background:var(--bg);color:var(--ink);font:calc(9px*var(--k))/1.8 'Press Start 2P',ui-monospace,monospace}
+.w{max-width:min(calc(540px*var(--k)),100%);margin:0 auto}
+h1{margin:0;font-size:calc(13px*var(--k));line-height:1.5}h1 small{display:block;font-size:calc(8px*var(--k));opacity:.7}
+.stage{margin:10px 0;border:4px solid var(--line);background:#2a1a30;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+canvas{display:block;width:100%;aspect-ratio:4/3;image-rendering:pixelated}
+button,.btn{font:inherit;color:#3a2431;background:var(--gold);border:3px solid #3a2431;box-shadow:0 4px 0 #3a2431;padding:10px;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+button:active,.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #3a2431}
+button:focus-visible,input:focus-visible,.btn:focus-visible{outline:3px solid #ff3d8b;outline-offset:2px}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;padding:9px 4px;font-size:calc(8px*var(--k));background:#e6d3a8}
+.tabs button.on{background:var(--gold);transform:translateY(3px);box-shadow:none}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(120px*var(--k)),1fr));gap:10px}.g1{display:grid;gap:10px}
+.o{display:flex;align-items:center;gap:8px;text-align:left;font-size:calc(8px*var(--k));line-height:1.6;background:var(--panel);color:var(--ink);border-color:var(--line);box-shadow:0 4px 0 var(--line)}
+.o.on{background:var(--gold);color:#3a2431;transform:translateY(3px);box-shadow:none}
+.o i{flex:none;width:18px;height:18px;border:3px solid #3a2431}.o em{flex:none;font-style:normal;font-size:calc(18px*var(--k))}
+.lb{margin:14px 0 8px;opacity:.85}
+input{width:100%;font:inherit;padding:10px;border:3px solid var(--line);background:#fff;color:#3a2431}
+.bar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:10px;align-items:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:4px solid var(--line);z-index:5}
+.bar .in{display:flex;gap:12px;align-items:center;justify-content:space-between;width:100%;max-width:min(calc(540px*var(--k)),100%)}
+#price{font-size:calc(12px*var(--k));color:#b8860b;line-height:1.4}#price small{display:block;font-size:calc(7px*var(--k));color:var(--ink);opacity:.7}
+#m{position:fixed;inset:0;display:grid;place-items:center;padding:14px;background:rgba(20,10,25,.6);z-index:10}
+#m[hidden]{display:none}
+.rc{width:min(calc(440px*var(--k)),100%);max-height:90vh;overflow:auto;background:#fff4dc;color:#3a2431;border:4px solid #3a2431;box-shadow:0 0 0 4px var(--gold),8px 8px 0 4px rgba(0,0,0,.4);padding:16px;animation:pop .3s steps(5)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.rc h2{margin:0 0 8px;font-size:calc(12px*var(--k))}.rc pre{margin:0 0 12px;white-space:pre-wrap;font:inherit;line-height:1.9;border-top:3px dashed #3a2431;border-bottom:3px dashed #3a2431;padding:10px 0}
+.rc .a{display:grid;gap:10px}.rc .btn,.rc button{background:var(--gold)}
+@media (pointer:coarse){input{font-size:calc(16px*var(--k))}}
+@media (prefers-reduced-motion:reduce){.rc{animation:none}}
+:root{--k:1}
+@media (min-width:800px){:root{--k:1.5}}
+@media (min-width:1500px){:root{--k:1.8}}
+</style></head><body><div class="w">
+<h1 id="ttl"></h1>
+<div class="stage"><canvas id="c" width="180" height="135" aria-label="Предпросмотр торта"></canvas></div>
+<nav class="tabs"><button data-s="0">1 ДЕСЕРТ</button><button data-s="1">2 ВКУС</button><button data-s="2">3 ДЕКОР</button></nav>
+<section id="opts"></section>
+</div>
+<div class="bar"><div class="in"><div id="price"></div><button id="go">🛵 Оформить</button></div></div>
+<div id="m" hidden><div class="rc" role="dialog" aria-label="Ваш заказ"><h2 id="rh"></h2><pre id="rp"></pre><div class="a"><a class="btn" id="tg" target="_blank" rel="noopener">📨 Отправить в Telegram</a><button id="cp">📋 Скопировать заказ</button><button id="back">✏️ Изменить торт</button></div></div></div>
+<script>
+const SHOP_CONFIG={name:"BENTO STUDIO",city:"Москва",currency:"₽",telegram:"bento_studio"}; // бренд, валюта и Telegram кондитерской
+const $=s=>document.querySelector(s),rnd=a=>a[Math.floor(Math.random()*a.length)];
+const money=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0')+'\u00a0'+SHOP_CONFIG.currency;
+const FM=[{n:'Бенто 500г',p:1500,hw:48,L:2,sh:14,ry:10,e:'🧁'},{n:'Бенто MAXI 1кг',p:2400,hw:64,L:3,sh:14,ry:12,e:'🎂'},{n:'Cake to go',p:950,hw:36,L:2,sh:12,ry:8,e:'🍰'}];
+const SP=[['Шоколад','#6b3a22',0],['Ваниль','#f3d9a0',0],['Красный бархат','#b3263a',150],['Лаванда','#b9a3e3',100]];
+const FI=[['Клубника','#ff5d7a'],['Черника','#5b5fc7'],['Карамель','#d99a3a'],['Фисташка','#9ad37a']];
+const FR=[['Белый','#fff8f0'],['Розовый','#ffb3c8'],['Мятный','#a8e6cf'],['Кремовый','#ffe9b0'],['Шоколадный','#8a5a44']];
+const TP=[['cherry','🍒','Вишня'],['berry','🍓','Клубника'],['blue','🫐','Черника'],['star','⭐','Звёзды'],['heart','💖','Сердечки'],['rain','🌈','Посыпка']];
+const SPR={cherry:['...G...','..G.G..','.G...G.','RR...RR','RRR.RRR','.R...R.'],berry:['.GGGGG.','.RRRRR.','RRYRRYR','RRRRRRR','.RRYRR.','..RRR..'],blue:['.BBB.','BBBBB','BWBBB','BBBBB','.BBB.'],star:['...Y...','..YYY..','YYYYYYY','.YYYYY.','.YY.YY.'],heart:['.RR.RR.','RRRRRRR','RRRRRRR','.RRRRR.','..RRR..','...R...']};
+const PAL={R:'#e0245e',G:'#3fa35a',Y:'#ffd23f',B:'#4a4fc4',W:'#fff'};
+const d3=new Date(Date.now()+3*864e5).toISOString().slice(0,10);
+const S={f:0,sp:1,fi:0,fr:1,tp:new Set(['berry']),candle:false,txt:'',date:d3,step:0,bt:9};
+const cv=$('#c'),ctx=cv.getContext('2d'),W=180,H=135,off=document.createElement('canvas');off.width=W;off.height=H;const g=off.getContext('2d');
+let AC,T=0,last=0,parts=[];
+function tone(f,d,v,f2){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const o=AC.createOscillator(),k=AC.createGain(),n=AC.currentTime;o.type='square';o.frequency.setValueAtTime(f,n);if(f2)o.frequency.exponentialRampToValueAtTime(f2,n+d);k.gain.setValueAtTime(v||.05,n);k.gain.exponentialRampToValueAtTime(.0001,n+d);o.connect(k);k.connect(AC.destination);o.start(n);o.stop(n+d)}catch(e){}}
+const R=(c,x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(x),Math.round(y),w,h)};
+function shade(h,m){const n=parseInt(h.slice(1),16),f=v=>Math.max(0,Math.min(255,Math.round(v*m)));return'rgb('+f(n>>16)+','+f(n>>8&255)+','+f(n&255)+')'}
+function ell(c,cx,cy,hw,ry,col){for(let r=-ry;r<=ry;r++){const w=Math.round(hw*Math.sqrt(1-(r/ry)**2));R(c,cx-w,cy+r,2*w,1,col)}}
+function spr(c,rows,x,y){rows.forEach((row,j)=>[...row].forEach((ch,i)=>{if(ch!=='.')R(c,x+i,y+j,1,1,PAL[ch])}))}
+const maxC=()=>Math.floor((2*FM[S.f].hw-16)/8);
+function build(){const F=FM[S.f],cx=90,ybc=112,bh=F.L*F.sh+(F.L-1)*4,yt=ybc-bh,hw=F.hw,ry=F.ry,fr=FR[S.fr][1];g.clearRect(0,0,W,H);
+ ell(g,cx,ybc+5,hw+14,ry+4,'rgba(0,0,0,.25)');ell(g,cx,ybc+3,hw+14,ry+4,'#e0d2bb');ell(g,cx,ybc+2,hw+12,ry+3,'#fffaf0');
+ for(let x=cx-hw;x<cx+hw;x++){const dn=(x+.5-cx)/hw,f=Math.sqrt(Math.max(0,1-dn*dn)),m=1.12-.34*(dn+1)/2,yb=Math.round(ybc+ry*f),y0=Math.round(yt+ry*f),hh=(Math.floor(x/3)*37+11)%13,dl=hh<5?3+hh*3:3;
+  for(let y=y0;y<yb;y++){const rb=yb-1-y;const c=y<y0+dl?fr:(rb%(F.sh+4)<F.sh?SP[S.sp][1]:FI[S.fi][1]);R(g,x,y,1,1,shade(c,m))}}
+ ell(g,cx,yt,hw,ry,shade(fr,.8));ell(g,cx,yt,hw-2,ry-2,fr);R(g,cx-hw+8,yt-ry+3,6,1,shade(fr,1.1));
+ if(S.tp.has('rain')){const cl=['#ff5d7a','#ffd23f','#5b9bff','#9ad37a','#c79bff'];for(let i=0;i<26;i++){const a=((i*53)%100-50)/50,b=((i*29)%100-50)/50;if(a*a+b*b<.8)R(g,cx+a*(hw-4),yt+b*(ry-3),2,1,cl[i%5])}}
+ const t=S.txt.trim();if(t){g.font='8px "Press Start 2P",monospace';g.textAlign='center';g.textBaseline='top';g.fillStyle='rgba(0,0,0,.18)';g.fillText(t,cx,yt-3);g.fillStyle=S.fr===4?'#fff8f0':'#5a2a45';g.fillText(t,cx,yt-4)}
+ const sel=TP.map(x=>x[0]).filter(k=>S.tp.has(k)&&k!=='rain'),SL=[[-.6,-.5],[0,-.62],[.6,-.5],[-.95,.2],[.95,.2],[-.62,.95],[.62,.95]];
+ if(sel.length)SL.forEach((s,i)=>{if(t.length>maxC()*.6&&(i===3||i===4))return;const r=SPR[sel[i%sel.length]];spr(g,r,Math.round(cx+s[0]*hw*.82-r[0].length/2),Math.round(yt+s[1]*ry-r.length))})}
+function burst(n){const F=FM[S.f];for(let i=0;i<n;i++)parts.push({x:90+(Math.random()-.5)*F.hw,y:112-F.L*F.sh-F.ry,vx:(Math.random()-.5)*90,vy:-Math.random()*80-20,c:rnd(['#ff5d7a','#ffd23f','#5b9bff','#9ad37a','#c79bff','#fff']),l:1})}
+function frame(dt){T+=dt;S.bt+=dt;const c=ctx,F=FM[S.f];
+ R(c,0,0,W,H,'#5b3f6e');for(let i=0;i<9;i++)R(c,i*20,0,10,92,'#654677');
+ R(c,18,12,46,36,'#2a1a30');R(c,20,14,42,32,'#8fd0ff');R(c,40,14,2,32,'#fff');R(c,20,30,42,2,'#fff');
+ R(c,118,34,52,4,'#8a5a3a');R(c,124,24,8,10,'#ffb3c8');R(c,138,26,8,8,'#a8e6cf');R(c,152,22,10,12,'#ffe9b0');
+ R(c,0,92,W,H-92,'#c98a58');R(c,0,92,W,3,'#e0a870');for(let j=0;j<4;j++)for(let i=0;i<15;i++)if((i+j)&1)R(c,i*12,98+j*10,12,10,'rgba(255,255,255,.12)');
+ for(let i=0;i<6;i++)if(Math.sin(T*3+i*2)>0)R(c,70+i*17,6+(i*7)%20,2,2,'#ffe9b0');
+ const by=Math.round(Math.max(0,1-S.bt*3)*-6*Math.abs(Math.sin(S.bt*14)));c.drawImage(off,0,by);
+ if(S.candle){const yt=112-(F.L*F.sh+(F.L-1)*4),x=90+Math.round(F.hw*.55),y=yt-3+by,f=Math.floor(T*8)%2;R(c,x,y-9,3,9,'#fff8f0');R(c,x,y-7,3,1,'#ff8fb1');R(c,x,y-4,3,1,'#ff8fb1');R(c,x-1,y-13,5,5,'rgba(255,220,120,.3)');R(c,x,y-12,3,3,'#ffd23f');R(c,x+1,y-13-f,1,2,'#ff8a3d');R(c,x+1,y-11,1,2,'#fff')}
+ parts=parts.filter(p=>p.l>0);for(const p of parts){p.vy+=200*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt*1.1;c.globalAlpha=Math.max(0,p.l);R(c,p.x,p.y,2,2,p.c)}c.globalAlpha=1}
+function loop(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;frame(dt);requestAnimationFrame(loop)}
+const price=()=>FM[S.f].p+SP[S.sp][2]+80*S.tp.size+(S.candle?50:0)+(S.txt.trim()?100:0);
+function upd(){$('#price').innerHTML='🪙 '+money(price())}
+const opt=(k,v,l,on,x)=>'<button class="o'+(on?' on':'')+'" data-k="'+k+'" data-v="'+v+'">'+x+'<span>'+l+'</span></button>';
+const sw=c=>'<i style="background:'+c+'"></i>';
+function renderOpts(){let h='';
+ document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',+b.dataset.s===S.step));
+ if(S.step===0)h='<div class="g1">'+FM.map((f,i)=>opt('f',i,f.n+'<br>от '+money(f.p),S.f===i,'<em>'+f.e+'</em>')).join('')+'</div>';
+ else if(S.step===1)h='<p class="lb">Бисквит</p><div class="g">'+SP.map((s,i)=>opt('sp',i,s[0]+(s[2]?'<br>+'+money(s[2]):''),S.sp===i,sw(s[1]))).join('')+'</div><p class="lb">Начинка</p><div class="g">'+FI.map((s,i)=>opt('fi',i,s[0],S.fi===i,sw(s[1]))).join('')+'</div>';
+ else h='<p class="lb">Крем</p><div class="g">'+FR.map((s,i)=>opt('fr',i,s[0],S.fr===i,sw(s[1]))).join('')+'</div><p class="lb">Декор: +'+money(80)+' за вид</p><div class="g">'+TP.map(t=>opt('tp',t[0],t[2],S.tp.has(t[0]),'<em>'+t[1]+'</em>')).join('')+opt('candle',1,'Свеча<br>+'+money(50),S.candle,'<em>🕯️</em>')+'</div><p class="lb">Надпись на торте <span id="cnt"></span></p><input id="tx" maxlength="'+maxC()+'" placeholder="С днём рождения!" autocomplete="off"><p class="lb">Когда нужен торт</p><input id="dt" type="date" min="'+new Date().toISOString().slice(0,10)+'">';
+ $('#opts').innerHTML=h;
+ if(S.step===2){const tx=$('#tx'),dt=$('#dt'),cnt=()=>$('#cnt').textContent=tx.value.length+'/'+maxC();tx.value=S.txt;dt.value=S.date;cnt();
+  tx.oninput=()=>{S.txt=tx.value;cnt();build();S.bt=0;upd();tone(700+tx.value.length*20,.04)};dt.onchange=()=>{S.date=dt.value}}}
+function changed(b){build();S.bt=0;upd();renderOpts();if(b)burst(18)}
+$('#opts').onclick=e=>{const b=e.target.closest('.o');if(!b)return;const k=b.dataset.k,v=b.dataset.v;
+ if(k==='f'){S.f=+v;S.txt=S.txt.slice(0,maxC())}else if(k==='sp')S.sp=+v;else if(k==='fi')S.fi=+v;else if(k==='fr')S.fr=+v;
+ else if(k==='tp'){S.tp.has(v)?S.tp.delete(v):S.tp.add(v)}else if(k==='candle')S.candle=!S.candle;
+ tone(660,.05);setTimeout(()=>tone(990,.06),50);changed(k==='tp'||k==='candle')};
+document.querySelector('.tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.step=+b.dataset.s;tone(520,.05);renderOpts()};
+function orderText(){const F=FM[S.f],tp=TP.filter(t=>S.tp.has(t[0])).map(t=>t[2].toLowerCase()).join(', ')||'без декора',t=S.txt.trim();
+ const dt=S.date?new Date(S.date+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long'}):'не указана';
+ return['Заказ из конструктора · '+SHOP_CONFIG.name,'Десерт: '+F.n,'Бисквит: '+SP[S.sp][0]+', начинка: '+FI[S.fi][0],'Крем: '+FR[S.fr][0].toLowerCase(),'Декор: '+tp,'Свеча: '+(S.candle?'да':'нет'),'Надпись: '+(t?'«'+t+'»':'без надписи'),'Дата: '+dt,'Сумма: '+money(price())].join('\n')}
+async function copy(t){try{await navigator.clipboard.writeText(t);return true}catch(e){return false}}
+$('#go').onclick=()=>{const t=orderText();$('#rh').textContent='🧾 Заказ №'+(1000+Math.floor(Math.random()*9000));$('#rp').textContent=t;
+ $('#tg').href='https://t.me/share/url?url=%20&text='+encodeURIComponent(t);$('#m').hidden=false;burst(40);[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.12),i*90))};
+$('#tg').onclick=()=>{copy($('#rp').textContent)};
+$('#cp').onclick=async()=>{const ok=await copy($('#rp').textContent);$('#cp').textContent=ok?'✅ Скопировано':'Выделите текст и скопируйте вручную';tone(880,.08)};
+$('#back').onclick=()=>{$('#m').hidden=true;$('#cp').textContent='📋 Скопировать заказ';tone(440,.06)};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#m').hidden=true});
+$('#ttl').innerHTML=SHOP_CONFIG.name+'<small>Конструктор торта · '+SHOP_CONFIG.city+'</small>';document.title=SHOP_CONFIG.name+' · Конструктор торта';
+build();upd();renderOpts();burst(14);requestAnimationFrame(loop);
+(document.fonts&&document.fonts.load?document.fonts.load('8px "Press Start 2P"'):Promise.resolve()).then(build);
+</script></body></html>

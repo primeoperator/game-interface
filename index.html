@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Заказы в Telegram, которые приятно обрабатывать</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf3df;--ink:#3a2431;--card:#fffaf0;--line:#3a2431;--gold:#ffcf40;--pink:#ff8fb1;--mint:#7fd6b0;color-scheme:light dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1a30;--ink:#fff4dc;--card:#3d2848;--line:#ff8fb1}}
+:root[data-theme="dark"]{--bg:#2a1a30;--ink:#fff4dc;--card:#3d2848;--line:#ff8fb1}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1040px;margin:0 auto;padding:18px}
+.px{font-family:'Press Start 2P',ui-monospace,monospace;line-height:1.5}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:11px}nav{display:flex;gap:16px;flex-wrap:wrap}nav a{color:inherit;font-weight:600;text-decoration:none}nav a:hover{text-decoration:underline}
+h1{font-size:clamp(20px,4.4vw,36px);margin:28px 0 14px}h2{font-size:clamp(14px,2.4vw,20px);margin:0 0 18px}
+.lead{font-size:clamp(17px,2vw,20px);max-width:640px;margin:0 0 22px}
+.btn{display:inline-block;font:inherit;font-family:'Press Start 2P',ui-monospace,monospace;font-size:12px;line-height:1.5;color:#3a2431;background:var(--gold);border:3px solid #3a2431;box-shadow:0 5px 0 #3a2431;padding:14px 18px;text-decoration:none;cursor:pointer;margin:0 10px 12px 0}
+.btn:hover{background:#ffe07a}.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #3a2431}.btn.alt{background:var(--mint)}
+.btn:focus-visible,a:focus-visible{outline:3px solid #ff3d8b;outline-offset:3px}
+canvas{display:block;width:100%;aspect-ratio:8/3;image-rendering:pixelated;border:4px solid var(--line);box-shadow:0 7px 0 rgba(0,0,0,.25);background:#2a1a30;margin-top:26px}
+section{margin:64px 0 0}
+.g2,.g3{display:grid;gap:18px}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:3px solid var(--line);box-shadow:5px 5px 0 var(--line);padding:18px}
+.card h3{margin:0 0 8px;font-size:12px}.num{display:inline-grid;place-items:center;width:34px;height:34px;background:var(--gold);color:#3a2431;border:3px solid #3a2431;font-size:12px;margin-bottom:10px}
+.chat{display:flex;flex-direction:column;gap:8px}.m{max-width:88%;padding:8px 12px;border:3px solid var(--line);background:#fff;color:#3a2431;font-size:15px}.m.me{align-self:flex-end;background:#9fe3c8}
+.ok li,.bad li{margin:8px 0}.ok{list-style:none;padding:0}.ok li::before{content:"✅ "}
+.note{opacity:.8;font-size:15px;margin-top:12px}
+#cta{text-align:center}#cta .card{padding:30px 18px}
+footer{margin:60px 0 20px;opacity:.7;font-size:14px;text-align:center}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head><body><div class="w">
+<header><div class="logo px" id="brand"></div><nav><a href="#demo">Демо</a><a href="#how">Как работает</a><a href="#start">Как запускаемся</a><a href="#cta">Связаться</a></nav></header>
+
+<h1 class="px">Заказы в Telegram, которые приятно обрабатывать</h1>
+<p class="lead">Клиент сам собирает заказ в игровом конструкторе. Вы управляете заказами как в пиксельной пекарне: перетащили гостя на кухню, и клиент получил статус в чат. Без бесконечных переписок.</p>
+<a class="btn" href="#demo">▶ Попробовать демо</a><a class="btn alt" href="#cta">Обсудить для моего бизнеса</a>
+<canvas id="hero" width="320" height="120" aria-label="Пиксельная кондитерская: гости проходят по комнатам"></canvas>
+
+<section id="problem"><h2 class="px">Было и стало</h2>
+<div class="g2">
+<div class="card"><h3 class="px">Сейчас: личка</h3><div class="chat">
+<div class="m">Здравствуйте, на субботу есть?</div><div class="m">А какие начинки?</div><div class="m">Можно с надписью?</div><div class="m me">Да, напишите, что именно…</div><div class="m">Скиньте ещё раз реквизиты</div><div class="m">Где мой заказ?</div></div></div>
+<div class="card"><h3 class="px">С игровым интерфейсом</h3><ul class="ok">
+<li>Клиент выбирает формат, вкус, декор, надпись и дату сам</li><li>Заказ сразу появляется в кабинете с готовым чеком</li><li>Статус клиент получает автоматически</li><li>Переписка привязана к заказу, ничего не теряется</li></ul></div>
+</div></section>
+
+<section id="how"><h2 class="px">Как это работает</h2>
+<div class="g3">
+<div class="card"><div class="num px">1</div><h3 class="px">Клиент собирает</h3><p>Открывает вашего бота в Telegram, выбирает параметры и видит свой торт и цену прямо в игре.</p></div>
+<div class="card"><div class="num px">2</div><h3 class="px">Заказ прилетает</h3><p>У двери вашей пекарни появляется гость со всеми деталями заказа. Звенит колокольчик.</p></div>
+<div class="card"><div class="num px">3</div><h3 class="px">Вы двигаете</h3><p>Перетащили гостя из «Новых» на «Кухню» и «Выдачу». Клиент получает сообщение о каждом шаге.</p></div>
+</div></section>
+
+<section id="demo"><h2 class="px">Попробуйте сами</h2>
+<div class="g2">
+<div class="card"><h3 class="px">🎂 Конструктор торта</h3><p>Так заказ собирает клиент: формат, бисквит, начинка, топпинги, надпись.</p><a class="btn" href="https://claude.ai/artifact/Qjd6qKytFin2po1ctXgGg9" target="_blank" rel="noopener">Открыть</a></div>
+<div class="card"><h3 class="px">🏪 Кабинет кондитера</h3><p>Так заказы видит владелец: гости, комнаты, чек и диалог. Нажмите «Симулировать входящий заказ» и перетащите гостя.</p><a class="btn alt" href="https://claude.ai/artifact/36Rcuypes8mEg4Czx2NjeE" target="_blank" rel="noopener">Открыть</a></div>
+</div><p class="note">Это демо-версии без сервера. В рабочем проекте заказ из конструктора приходит в кабинет мгновенно, а клиент получает сообщения от вашего бота в Telegram.</p></section>
+
+<section><h2 class="px">Что получает бизнес</h2>
+<ul class="ok"><li>Меньше переписок: клиент указывает всё нужное до того, как напишет вам</li><li>Все заказы и статусы на одном экране, на телефоне и на компьютере</li><li>Меню, цены и правила подстроены под ваш процесс, а не наоборот</li><li>Ничего не нужно устанавливать: всё работает внутри Telegram</li><li>Интерфейс, который запоминается и нравится клиентам</li></ul>
+<p class="note">Подходит студиям, которые принимают заказы с выбором параметров: торты, букеты, подарочные боксы, печенье и похожее.</p></section>
+
+<section id="start"><h2 class="px">Как запускаемся</h2>
+<div class="g2">
+<div class="card"><div class="num px">1</div><h3 class="px">Короткое интервью</h3><p>Разбираем, как у вас сейчас принимаются заказы, какие есть правила и ограничения.</p></div>
+<div class="card"><div class="num px">2</div><h3 class="px">Настройка под вас</h3><p>Заносим меню, цены, форматы, сроки. Подключаем ваших ботов.</p></div>
+<div class="card"><div class="num px">3</div><h3 class="px">Пилот 14 дней</h3><p>Работаете на реальных заказах, мы смотрим, что мешает, и правим.</p></div>
+<div class="card"><div class="num px">4</div><h3 class="px">Решаете сами</h3><p>Нравится, остаёмся на подписке с поддержкой. Не нравится, расходимся без обязательств.</p></div>
+</div></section>
+
+<section id="cta"><div class="card"><h2 class="px">Обсудим для вашего бизнеса?</h2><p id="ctaText">Ответьте на сообщение, в котором пришла эта ссылка, и расскажите, как вы принимаете заказы сейчас.</p><a class="btn" id="ctaBtn" hidden target="_blank" rel="noopener">✉ Написать в Telegram</a></div></section>
+<footer id="foot"></footer>
+</div>
+<script>
+const BRAND="ИГРОВЫЕ ИНТЕРФЕЙСЫ ДЛЯ БИЗНЕСА"; // название студии/бренда
+const CONTACT_TG=""; // ваш ник в Telegram без @: появится кнопка «Написать в Telegram»
+document.getElementById('brand').textContent=BRAND;document.getElementById('foot').textContent=BRAND+' · '+new Date().getFullYear();
+if(CONTACT_TG){const b=document.getElementById('ctaBtn');b.href='https://t.me/'+CONTACT_TG;b.hidden=false;document.getElementById('ctaText').textContent='Напишите, как вы принимаете заказы сейчас, и я покажу, как это будет выглядеть у вас.'}
+(function(){const cv=document.getElementById('hero'),c=cv.getContext('2d'),W=320,H=120,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const R=(x,y,w,h,k)=>{c.fillStyle=k;c.fillRect(Math.round(x),Math.round(y),w,h)};
+ const Z=[['#f6c9d6','#f3e0c0','НОВЫЕ','Хочу торт!'],['#e8c07a','#d9d2c5','КУХНЯ','Пахнет вкусно!'],['#a9d8cf','#e6efe0','ВЫДАЧА','Спасибо!']];
+ const G=['#ff8fb1','#7fd6b0','#8fb8ff','#ffcf40'].map((k,i)=>({k,x:-24-i*80,y:84+(i%2)*14,s:16+i*2}));
+ function tx(s,x,y,z,k,a){c.font=z+'px "Press Start 2P",monospace';c.fillStyle=k;c.textAlign=a||'left';c.fillText(s,Math.round(x),Math.round(y))}
+ function draw(t){Z.forEach((z,i)=>{R(i*107,0,107,H,z[0]);for(let j=0;j<8;j++)for(let k=0;k<4;k++)R(i*107+j*14,64+k*14,14,14,(j+k)&1?z[1]:'rgba(255,255,255,.35)');R(i*107,60,107,4,'#8a5a3a');R(i*107+4,4,99,10,'rgba(42,26,48,.85)');tx(z[2],i*107+8,12,7,'#ffe9b0')});
+  R(105,0,3,H,'#2a1a30');R(212,0,3,H,'#2a1a30');R(10,24,34,30,'#a0643a');R(12,26,30,12,'#bfe9ff');R(130,24,40,32,'#555a66');R(136,32,28,18,'#222');R(138+Math.abs(Math.sin(t*6))*4,38,6,12,'#ff8a3d');R(240,24,50,30,'#ffcf40');R(244,28,42,22,'#3a2431');tx('ЯНДЕКС',265,42,6,'#ffcf40','center');
+  G.forEach(g=>{const x=((g.x+(still?120:t*g.s))%380)-30,zi=Math.max(0,Math.min(2,Math.floor(x/107))),b=Math.abs(Math.sin(t*9+g.s))*3,l=Math.sin(t*9+g.s)>0;
+   R(x-6,g.y+16,12,4,'rgba(0,0,0,.25)');R(x-4,g.y+9,3,l?5:7,'#3a2a4a');R(x+1,g.y+9,3,l?7:5,'#3a2a4a');R(x-6,g.y-4-b,12,13,g.k);R(x-5,g.y-16-b,10,10,'#ffd9b3');R(x-5,g.y-18-b,10,4,'#3a2431');R(x-3,g.y-11-b,2,2,'#222');R(x+1,g.y-11-b,2,2,'#222');
+   const s=Z[zi][3],w=s.length*4+8;R(x-w/2,g.y-38-b,w,12,'#2a1a30');R(x-w/2+1,g.y-37-b,w-2,10,'#fff4dc');tx(s,x,g.y-29-b,5,'#3a2431','center')})}
+ function loop(ms){draw(ms/1000);if(!still)requestAnimationFrame(loop)}
+ (document.fonts&&document.fonts.load?document.fonts.load('7px "Press Start 2P"'):Promise.resolve()).then(()=>requestAnimationFrame(loop));
+})();
+</script></body></html>
