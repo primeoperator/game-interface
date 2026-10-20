@@ -36,6 +36,95 @@
   --line:#ff8fb1;
   --sub:#d4c2ce;
 }
+
+/* НОВОГОДНИЙ РЕЖИМ (XMAS MODE) */
+body.xmas{
+  --bg:#101a24;
+  --ink:#f0f8ff;
+  --card:#182838;
+  --line:#4ca3dd;
+  --gold:#ffd54f;
+  --sub:#b0cce3;
+}
+body.xmas .card{
+  border-color:#5bb2ec;
+  box-shadow:5px 5px 0 #1b4968, 0 0 20px rgba(91,178,236,0.18);
+  background:linear-gradient(180deg,#1b2d40 0%,#142232 100%);
+}
+body.xmas canvas{
+  border-color:#5bb2ec;
+  box-shadow:0 8px 0 #122131, 0 0 30px rgba(91,178,236,0.3);
+}
+body.xmas .btn{
+  background:#e53935;
+  color:#fff;
+  border-color:#2a0808;
+  box-shadow:0 5px 0 #2a0808;
+}
+body.xmas .btn:hover{background:#ff5252}
+body.xmas .btn.alt{
+  background:#2e7d32;
+  color:#fff;
+}
+body.xmas .num{
+  background:#e53935;
+  color:#fff;
+  border-color:#fff;
+}
+
+/* Новогодняя гирлянда наверху */
+#garland{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;
+  height:14px;
+  background:repeating-linear-gradient(90deg,
+    #ff3b30 0 12px, transparent 12px 24px,
+    #ffd54f 24px 36px, transparent 36px 48px,
+    #34c759 48px 60px, transparent 60px 72px,
+    #5ac8fa 72px 84px, transparent 84px 96px);
+  box-shadow:0 2px 14px rgba(255,213,79,0.7);
+  z-index:998;
+  animation:lights .9s steps(2) infinite;
+}
+body.xmas #garland{display:block}
+@keyframes lights{50%{filter:brightness(1.5) hue-rotate(45deg)}}
+
+/* Холст падающего снега поверх всего экрана */
+#snow-canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:997;
+  display:none;
+}
+body.xmas #snow-canvas{display:block}
+
+/* Кнопка переключения зимы в углу */
+#xmas-toggle{
+  background:linear-gradient(135deg,#ff4757 0%,#2ed573 100%);
+  border:2px solid #fff;
+  border-radius:999px;
+  color:#fff;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;
+  font-weight:800;
+  padding:8px 14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:all .15s;
+}
+#xmas-toggle:hover{transform:scale(1.05)}
+#xmas-toggle:active{transform:scale(0.96)}
+body.xmas #xmas-toggle{
+  background:linear-gradient(135deg,#2ed573 0%,#1e90ff 100%);
+  box-shadow:0 0 16px rgba(46,213,115,0.7);
+}
+
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *{box-sizing:border-box}
 body{
@@ -44,12 +133,13 @@ body{
   color:var(--ink);
   font:16px/1.65 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing:antialiased;
+  transition:background .25s ease, color .25s ease;
 }
 .w{max-width:1040px;margin:0 auto;padding:20px}
 .px{font-family:'Press Start 2P',ui-monospace,monospace;line-height:1.4}
 header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:8px}
 .logo{font-size:11px;letter-spacing:0.04em}
-nav{display:flex;gap:18px;flex-wrap:wrap}
+nav{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
 nav a{color:inherit;font-weight:700;font-size:15px;text-decoration:none;transition:opacity .15s}
 nav a:hover{opacity:.75}
 
@@ -92,7 +182,7 @@ h2{
 .btn.alt{background:var(--mint)}
 .btn:focus-visible,a:focus-visible{outline:3px solid #ff3d8b;outline-offset:3px}
 
-canvas{
+canvas#hero{
   display:block;
   width:100%;
   aspect-ratio:8/3;
@@ -115,6 +205,7 @@ section{margin:64px 0 0}
   box-shadow:5px 5px 0 var(--line);
   padding:22px;
   border-radius:16px;
+  transition:all .25s ease;
 }
 .card h3{
   margin:0 0 10px;
@@ -151,12 +242,25 @@ section{margin:64px 0 0}
 footer{margin:60px 0 20px;color:var(--sub);font-size:14px;text-align:center;font-weight:600}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-</style></head><body><div class="w">
-<header><div class="logo px" id="brand"></div><nav><a href="#demo">Демо</a><a href="#how">Как работает</a><a href="#start">Как запускаемся</a><a href="#cta">Связаться</a></nav></header>
+</style></head><body>
+<div id="garland"></div>
+<canvas id="snow-canvas"></canvas>
 
-<h1>Заказы в Telegram, которые приятно обрабатывать</h1>
-<p class="lead">Клиент сам собирает заказ в игровом конструкторе. Вы управляете заказами как в пиксельной пекарне: перетащили гостя на кухню, и клиент получил статус в чат. Без бесконечных переписок.</p>
-<a class="btn" href="#demo">▶ Попробовать демо</a><a class="btn alt" href="#cta">Обсудить для моего бизнеса</a>
+<div class="w">
+<header>
+  <div class="logo px" id="brand"></div>
+  <nav>
+    <a href="#demo">Демо</a>
+    <a href="#how">Как работает</a>
+    <a href="#start">Как запускаемся</a>
+    <a href="#cta">Связаться</a>
+    <button id="xmas-toggle" title="Включить новогодний вайб">❄️ Зимний вайб</button>
+  </nav>
+</header>
+
+<h1 id="hero-title">Заказы в Telegram, которые приятно обрабатывать</h1>
+<p class="lead" id="hero-lead">Клиент сам собирает заказ в игровом конструкторе. Вы управляете заказами как в пиксельной пекарне: перетащили гостя на кухню, и клиент получил статус в чат. Без бесконечных переписок.</p>
+<a class="btn" href="#demo" id="btn-demo">▶ Попробовать демо</a><a class="btn alt" href="#cta" id="btn-cta">Обсудить для моего бизнеса</a>
 <canvas id="hero" width="320" height="120" aria-label="Пиксельная кондитерская: гости проходят по комнатам"></canvas>
 
 <section id="problem"><h2>Было и стало</h2>
@@ -192,7 +296,7 @@ footer{margin:60px 0 20px;color:var(--sub);font-size:14px;text-align:center;font
 <div class="card"><div class="num">4</div><h3>Решаете сами</h3><p class="note" style="margin:0">Нравится, остаёмся на подписке с поддержкой. Не нравится, расходимся без обязательств.</p></div>
 </div></section>
 
-<section id="cta"><div class="card"><h2>Обсудим для вашего бизнеса?</h2><p id="ctaText" class="lead" style="font-size:16px;margin:0 0 18px">Напишите мне в Telegram, и я покажу, как это будет выглядеть именно у вас:</p><a class="btn" id="ctaBtn" href="https://t.me/delaushiveshi" target="_blank" rel="noopener">✉ Написать в Telegram (@delaushiveshi)</a></div></section>
+<section id="cta"><div class="card"><h2 id="cta-h2">Обсудим для вашего бизнеса?</h2><p id="ctaText" class="lead" style="font-size:16px;margin:0 0 18px">Напишите мне в Telegram, и я покажу, как это будет выглядеть именно у вас:</p><a class="btn" id="ctaBtn" href="https://t.me/delaushiveshi" target="_blank" rel="noopener">✉ Написать в Telegram (@delaushiveshi)</a></div></section>
 <footer id="foot"></footer>
 </div>
 <script>
@@ -204,6 +308,62 @@ const b=document.getElementById('ctaBtn');
 b.href='https://t.me/'+CONTACT_TG;
 b.hidden=false;
 
+// --- НОВОГОДНИЙ ПЕРЕКЛЮЧАТЕЛЬ И СНЕГ ---
+let isXmas = false;
+const xmasBtn = document.getElementById('xmas-toggle');
+
+xmasBtn.onclick = () => {
+  isXmas = !isXmas;
+  document.body.classList.toggle('xmas', isXmas);
+  xmasBtn.textContent = isXmas ? '🎄 Обычный режим' : '❄️ Зимний вайб';
+
+  const h1 = document.getElementById('hero-title');
+  const lead = document.getElementById('hero-lead');
+  if (isXmas) {
+    h1.textContent = '🎄 Новогодние заказы без аврала и путаницы в личке';
+    lead.textContent = 'Клиент сам собирает новогодний бенто под падающий снег. Вы двигаете гостей в шапочках Санты, а бот выдаёт слоты до 31 декабря автоматически.';
+  } else {
+    h1.textContent = 'Заказы в Telegram, которые приятно обрабатывать';
+    lead.textContent = 'Клиент сам собирает заказ в игровом конструкторе. Вы управляете заказами как в пиксельной пекарне: перетащили гостя на кухню, и клиент получил статус в чат. Без бесконечных переписок.';
+  }
+};
+
+// Генератор падающего снега
+const sCv = document.getElementById('snow-canvas');
+const sCtx = sCv.getContext('2d');
+let flakes = [];
+function resizeSnow(){ sCv.width = window.innerWidth; sCv.height = window.innerHeight; }
+window.addEventListener('resize', resizeSnow);
+resizeSnow();
+
+for(let i=0; i<80; i++){
+  flakes.push({
+    x: Math.random()*window.innerWidth,
+    y: Math.random()*window.innerHeight,
+    r: 1.5 + Math.random()*2.5,
+    s: 0.8 + Math.random()*1.4,
+    w: Math.random()*2
+  });
+}
+
+function drawSnow(){
+  if(isXmas){
+    sCtx.clearRect(0,0,sCv.width,sCv.height);
+    sCtx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+    flakes.forEach(f => {
+      sCtx.beginPath();
+      sCtx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+      sCtx.fill();
+      f.y += f.s;
+      f.x += Math.sin(f.y * 0.02) * 0.5;
+      if(f.y > sCv.height) { f.y = -5; f.x = Math.random()*sCv.width; }
+    });
+  }
+  requestAnimationFrame(drawSnow);
+}
+drawSnow();
+
+// --- ГЛАВНЫЙ CANVAS С ПИКСЕЛЬНЫМИ ГОСТЯМИ И ШАПОЧКАМИ САНТЫ ---
 (function(){
   const cv=document.getElementById('hero'),c=cv.getContext('2d'),W=320,H=120,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
   const R=(x,y,w,h,k)=>{c.fillStyle=k;c.fillRect(Math.round(x),Math.round(y),w,h)};
@@ -215,63 +375,101 @@ b.hidden=false;
   const G=['#ff8fb1','#7fd6b0','#8fb8ff','#ffcf40'].map((k,i)=>({k,x:-24-i*80,y:84+(i%2)*14,s:16+i*2}));
 
   function draw(t){
+    // Фон 3 комнат
     Z.forEach((z,i)=>{
-      R(i*107,0,107,H,z[0]);
+      const wCol = isXmas ? ['#1b3a57','#234e75','#16324c'][i] : z[0];
+      const fCol = isXmas ? ['#224263','#2f5880'][i%2] : z[1];
+      R(i*107,0,107,H,wCol);
       for(let j=0;j<8;j++){
         for(let k=0;k<4;k++){
-          R(i*107+j*14,64+k*14,14,14,(j+k)&1?z[1]:'rgba(255,255,255,.35)');
+          R(i*107+j*14,64+k*14,14,14,(j+k)&1?fCol:(isXmas?'rgba(255,255,255,.15)':'rgba(255,255,255,.35)'));
         }
       }
-      R(i*107,60,107,4,'#8a5a3a');
-      R(i*107+4,4,99,10,'rgba(42,26,48,.85)');
+      R(i*107,60,107,4,isXmas?'#365f88':'#8a5a3a');
+      R(i*107+4,4,99,10,'rgba(10,20,35,.85)');
       c.font='7px "Press Start 2P",monospace';
       c.fillStyle='#ffe9b0';
       c.textAlign='left';
       c.fillText(z[2],i*107+8,12);
     });
 
-    R(105,0,3,H,'#2a1a30');
-    R(212,0,3,H,'#2a1a30');
-    R(10,24,34,30,'#a0643a');
-    R(12,26,30,12,'#bfe9ff');
+    // Перегородки и новогодние гирлянды на стене
+    R(105,0,3,H,'#0e1b29');
+    R(212,0,3,H,'#0e1b29');
+
+    // Если зима — рисуем пиксельную ёлочку в первой комнате!
+    if(isXmas){
+      // Ёлка
+      R(18,34,16,18,'#1b6834');
+      R(20,26,12,10,'#278e47');
+      R(23,20,6,8,'#3ec36a');
+      R(24,52,4,6,'#5a3a22');
+      // Звезда
+      R(24,17,4,4,'#ffd54f');
+      // Шарики
+      R(20,38,3,3,Math.sin(t*8)>0?'#ff3b30':'#ffd54f');
+      R(28,32,3,3,Math.sin(t*8+2)>0?'#5ac8fa':'#ff2d55');
+    } else {
+      R(10,24,34,30,'#a0643a');
+      R(12,26,30,12,'#bfe9ff');
+    }
+
+    // Печь на кухне
     R(130,24,40,32,'#555a66');
     R(136,32,28,18,'#222');
     R(138+Math.abs(Math.sin(t*6))*4,38,6,12,'#ff8a3d');
-    R(240,24,50,30,'#ffcf40');
-    R(244,28,42,22,'#3a2431');
-    c.font='6px "Press Start 2P",monospace';
-    c.fillStyle='#ffcf40';
-    c.textAlign='center';
-    c.fillText('ЯНДЕКС',265,42);
 
+    // Вывеска
+    R(240,24,50,30,isXmas?'#2e7d32':'#ffcf40');
+    R(244,28,42,22,'#1b2d40');
+    c.font='6px "Press Start 2P",monospace';
+    c.fillStyle=isXmas?'#ffd54f':'#ffcf40';
+    c.textAlign='center';
+    c.fillText(isXmas?'САНТА':'ЯНДЕКС',265,42);
+
+    // Персонажи
     G.forEach(g=>{
       const x=((g.x+(still?120:t*g.s))%380)-30;
       const zi=Math.max(0,Math.min(2,Math.floor(x/107)));
       const b=Math.abs(Math.sin(t*9+g.s))*3;
       const l=Math.sin(t*9+g.s)>0;
 
-      R(x-6,g.y+16,12,4,'rgba(0,0,0,.25)');
-      R(x-4,g.y+9,3,l?5:7,'#3a2a4a');
-      R(x+1,g.y+9,3,l?7:5,'#3a2a4a');
-      R(x-6,g.y-4-b,12,13,g.k);
+      // Тень и ножки
+      R(x-6,g.y+16,12,4,'rgba(0,0,0,.35)');
+      R(x-4,g.y+9,3,l?5:7,'#142232');
+      R(x+1,g.y+9,3,l?7:5,'#142232');
+      // Тело и голова
+      R(x-6,g.y-4-b,12,13,isXmas?'#c62828':g.k);
       R(x-5,g.y-16-b,10,10,'#ffd9b3');
-      R(x-5,g.y-18-b,10,4,'#3a2431');
+
+      // Шапочка Санты в новогоднем режиме!
+      if(isXmas){
+        R(x-6,g.y-19-b,12,4,'#ffffff'); // Белый меховой ободок
+        R(x-5,g.y-25-b,9,6,'#e53935');  // Красный колпак
+        R(x+3,g.y-22-b,4,4,'#e53935');  // Загиб
+        R(x+6,g.y-20-b,3,3,'#ffffff');  // Помпон
+      } else {
+        R(x-5,g.y-18-b,10,4,'#3a2431');
+      }
+
+      // Глазки
       R(x-3,g.y-11-b,2,2,'#222');
       R(x+1,g.y-11-b,2,2,'#222');
 
-      const phrase = Z[zi][3];
+      // Фраза в облачке
+      const phrase = isXmas ? ['К 31-му!','Имбирный!','С Новым!'][zi] : Z[zi][3];
       c.font = '600 8px system-ui, -apple-system, sans-serif';
       const textWidth = Math.ceil(c.measureText(phrase).width);
       const bubbleW = textWidth + 10;
       const bubbleH = 13;
       const bubbleX = Math.round(x - bubbleW / 2);
-      const bubbleY = Math.round(g.y - 34 - b);
+      const bubbleY = Math.round(g.y - 38 - b);
 
-      R(bubbleX, bubbleY, bubbleW, bubbleH, '#2a1a30');
-      R(bubbleX + 1, bubbleY + 1, bubbleW - 2, bubbleH - 2, '#fff4dc');
-      R(x - 1, bubbleY + bubbleH, 3, 2, '#2a1a30');
+      R(bubbleX, bubbleY, bubbleW, bubbleH, '#0e1b29');
+      R(bubbleX + 1, bubbleY + 1, bubbleW - 2, bubbleH - 2, isXmas?'#eaf6ff':'#fff4dc');
+      R(x - 1, bubbleY + bubbleH, 3, 2, '#0e1b29');
 
-      c.fillStyle = '#2a1a30';
+      c.fillStyle = '#0e1b29';
       c.textAlign = 'center';
       c.fillText(phrase, x, bubbleY + 9);
     });
